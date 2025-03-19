@@ -986,7 +986,59 @@ body.mobile-nav-active #mobile-nav-toggle {
 /*--------------------------------------------------------------
 # Hotels Section
 --------------------------------------------------------------*/
+.admin-buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
 
+.btn-delete {
+  background-color: #ff4d4d; /* Red color for delete */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+.btn-edit {
+  background-color: #4d79ff; /* Blue color for edit */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background-color: #0039e6; /* Darker blue on hover */
+}
+
+.modal-content {
+  border-radius: 10px;
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+}
 #hotels {
   padding: 60px 0;
 }
@@ -1709,10 +1761,10 @@ body.mobile-nav-active #mobile-nav-toggle {
 #register a:hover {
   color: #e0072f;
 }
-
 #event-details {
   padding: 60px 0;
   background: #f6f7fd;
+  display: block !important;
 
   .section-header {
     margin-bottom: 40px;
