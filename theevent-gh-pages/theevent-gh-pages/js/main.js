@@ -15,15 +15,17 @@ jQuery(document).ready(function ($) {
   // Header fixed on scroll
   $(window).scroll(function () {
     if ($(this).scrollTop() > 100) {
-      $("#header").addClass("header-scrolled");
+      $("#header").fadeOut(); // Hide header when scrolled down
     } else {
-      $("#header").removeClass("header-scrolled");
+      $("#header").fadeIn().addClass("header-scrolled"); // Show header at the top & add class
     }
   });
-
-  if ($(window).scrollTop() > 100) {
-    $("#header").addClass("header-scrolled");
+  
+  // Ensure correct state on page load
+  if ($(window).scrollTop() === 0) {
+    $("#header").addClass("header-scrolled").show();
   }
+  
 
   // Real view height for mobile devices
   if (window.matchMedia("(max-width: 767px)").matches) {
