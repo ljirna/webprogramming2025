@@ -36,6 +36,14 @@ class EventsDao extends BaseDao {
     }
 
     public function delete_event($event_id) {
-        return $this->query("DELETE FROM events WHERE id = :id", ["id" => $event_id]);
+        $stmt = $this->connection->prepare("DELETE FROM events WHERE event_id = :event_id");
+        $stmt->execute(['event_id' => $event_id]);
+        $rowCount = $stmt->rowCount();
+        
+        return [
+            'success' => $rowCount > 0,
+            'rows_affected' => $rowCount,
+            'event_id' => $event_id
+        ];
     }
 }
