@@ -20,4 +20,22 @@ class ReservationsDao extends BaseDao {
         $stmt->bindParam(':ticket_type', $reservation['ticket_type']);
         $stmt->execute();
     }
+
+    public function get_subscriptions_by_user($user_id) {
+        return $this->query(
+            "SELECT * FROM newsletter_subscriptions 
+             WHERE user_id = :user_id 
+             ORDER BY subscribed_at DESC",
+            ['user_id' => $user_id]
+        );
+    }
+
+    /*Added for deleting an event*/
+    public function get_reservations_for_event($event_id){
+    return $this->query(
+        "SELECT * FROM reservations 
+         WHERE event_id = :event_id",
+        ['event_id' => $event_id]
+        );
+    }
 }
