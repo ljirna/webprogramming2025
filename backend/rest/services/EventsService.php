@@ -28,13 +28,16 @@ class EventsService extends BaseService {
         return $this->eventsDao->get_event_by_id($event_id);
     }
 
-    /*Create a new event*/
     public function add_event($event) {
         /*Ensure the event has a name and date*/
         if (empty($event['title']) || empty($event['date'])) {
             throw new Exception("Event name and date are required.");
         }
-        
+        /*Ensure the description is less than 50 words*/
+        if (strlen($event['description']) > 50) {
+            throw new Exception("Event description is too long. Max 50 characters allowed.");
+        }
+    
         return $this->eventsDao->add_event($event);
     }
 

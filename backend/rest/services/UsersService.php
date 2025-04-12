@@ -49,6 +49,13 @@ class UsersService extends BaseService {
         if ($user_id <= 0) {
             throw new Exception("Invalid user ID.");
         }
+        /*Checks if the updated email exists in the database already*/
+        if (isset($user['email'])) {
+            $existing = $this->usersDao->get_user_by_email($user['email']);
+            if ($existing && $existing['user_id'] != $user_id) {
+                throw new Exception("This email is already in use by another account.");
+            }
+        }
 
         return $this->usersDao->update_user($user_id, $user);
     }
