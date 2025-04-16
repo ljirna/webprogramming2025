@@ -64,7 +64,7 @@ class EventsService extends BaseService {
                 throw new Exception("Cannot delete event. There are existing reservations for this event.");
             }
 
-            /*If no reservations, proceed with deleting the event*/
+            /*If there are no reservations, proceed with deleting the event*/
             $this->eventsDao->delete_event($event_id);
             return "Event deleted successfully!";
         } catch (Exception $e) {

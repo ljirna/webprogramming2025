@@ -23,14 +23,6 @@ class UsersService extends BaseService {
         return $this->usersDao->get_user_by_id($user_id);
     }
 
-    /*Get user by email (used for login)*/
-    public function get_user_by_email($email) {
-        if (empty($email)) {
-            throw new Exception("Email is required.");
-        }
-        return $this->usersDao->get_user_by_email($email);
-    }
-
     /*Register a new user*/
     public function add_user($user) {
         if (empty($user['email']) || empty($user['username']) || empty($user['role'])) {
