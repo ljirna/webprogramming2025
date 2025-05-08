@@ -20,4 +20,13 @@ class ReservationsDao extends BaseDao {
         $stmt->bindParam(':ticket_type', $reservation['ticket_type']);
         $stmt->execute();
     }
+
+    /*Added for deleting an event*/
+    public function get_reservations_for_event($event_id){
+    return $this->query(
+        "SELECT * FROM reservations 
+         WHERE event_id = :event_id",
+        ['event_id' => $event_id]
+        );
+    }
 }

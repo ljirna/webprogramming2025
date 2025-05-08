@@ -42,18 +42,29 @@ class UsersDao extends BaseDao {
         return $this->update($user, $user_id, "user_id");
     }
 
-    /* Delete a user*/
+    /* Delete a user with cascade deletion*/
     public function delete_user($user_id) {
-        $stmt = $this->connection->prepare("DELETE FROM users WHERE user_id = :user_id");
-        $stmt->execute(['user_id' => $user_id]);
-        $rowCount = $stmt->rowCount();
-        
-        return [
-            'success' => $rowCount > 0,
-            'rows_affected' => $rowCount,
-            'user_id' => $user_id
-        ];
+        try {
+            /*Delete the user's newsletter subscriptions*/
+            $this->connection->prepare(
+                "DELETE FROM newsletter_subscriptions WHERE user_id = :user_id"
+            )->execute(['user_id' => $user_id]);
+    
+            /*Delete the user*/
+            $stmt = $this->connection->prepare(
+                "DELETE FROM users WHERE user_id = :user_id"
+            );
+            $stmt->execute(['user_id' => $user_id]);
+    
+            return [
+                'success' => $stmt->rowCount() > 0,
+                'user_id' => $user_id
+            ];
+        } catch (Exception $e) {
+            throw new Exception("Failed to delete user: " . $e->getMessage());
+        }
     }
+    
 
     /*Check if email already exists (for registration)*/
     public function email_exists($email) {
