@@ -31,7 +31,8 @@ require_once __DIR__ . '/../services/EventImagesService.php';
  * )
  */
 
-Flight::route('GET /event_images/@event_id', function($event_id){
+Flight::route('GET /event_images/@event_id', function ($event_id) {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::eventImagesService()->get_images_by_event($event_id));
 });
 
@@ -63,6 +64,7 @@ Flight::route('GET /event_images/@event_id', function($event_id){
  * )
  */
 
-Flight::route('GET /event_image/@image_id', function($image_id){
+Flight::route('GET /event_image/@image_id', function ($image_id) {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::eventImagesService()->get_image_by_id($image_id));
 });

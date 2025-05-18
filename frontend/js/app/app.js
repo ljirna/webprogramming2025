@@ -41,7 +41,7 @@ $(document).ready(function () {
     // Handle event details link click
     $(document).on("click", "a[href^='#event-details']", function (e) {
       e.preventDefault();
-      var href = "views/single_event.html";
+      var href = "views/single_event_user.html";
 
       // Load the single event content
       $("#event-details").load(href, function (response, status, xhr) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
     e.preventDefault();
     console.log("Loading event details");
 
-    var href = "views/single_event.html";
+    var href = "views/single_event_user.html";
     console.log("Loading file:", href);
 
     $("#event-details").load(href, function (response, status, xhr) {
@@ -145,27 +145,27 @@ function openEditModal(title, date, time, location, description, image) {
 }
 
 // Function to handle form submission (save changes)
-document
-  .getElementById("edit-event-form")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
+// document
+//   .getElementById("edit-event-form")
+//   .addEventListener("submit", function (e) {
+//     e.preventDefault();
 
-    // Get the updated values from the form
-    const updatedEvent = {
-      title: document.getElementById("edit_event_title").value,
-      date: document.getElementById("edit_event_date").value,
-      time: document.getElementById("edit_event_time").value,
-      location: document.getElementById("edit_event_location").value,
-      description: document.getElementById("edit_event_description").value,
-      image: document.getElementById("edit_event_image").files[0] || null, // Handle file upload
-    };
+//     // Get the updated values from the form
+//     const updatedEvent = {
+//       title: document.getElementById("edit_event_title").value,
+//       date: document.getElementById("edit_event_date").value,
+//       time: document.getElementById("edit_event_time").value,
+//       location: document.getElementById("edit_event_location").value,
+//       description: document.getElementById("edit_event_description").value,
+//       image: document.getElementById("edit_event_image").files[0] || null, // Handle file upload
+//     };
 
-    // Perform the update action (e.g., send an AJAX request to the server)
-    console.log("Updated Event:", updatedEvent);
+//     // Perform the update action (e.g., send an AJAX request to the server)
+//     console.log("Updated Event:", updatedEvent);
 
-    // Close the modal after saving
-    $("#editEventModal").modal("hide");
-  });
+//     // Close the modal after saving
+//     $("#editEventModal").modal("hide");
+//   });
 
 // Function to handle deleting an event
 function deleteEvent(eventName) {

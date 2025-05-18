@@ -23,7 +23,8 @@ require_once __DIR__ . '/../services/NewsletterService.php';
  * )
  */
 
-Flight::route('POST /newsletter', function(){
+Flight::route('POST /newsletter', function () {
+   Flight::auth_middleware()->authorizeRole(Roles::USER);
    $data = Flight::request()->data->getData();
    Flight::json(Flight::newsletterService()->add_subscription($data['email']));
 });
@@ -48,7 +49,7 @@ Flight::route('POST /newsletter', function(){
  * )
  */
 
-Flight::route('GET /newsletter', function(){
+Flight::route('GET /newsletter', function () {
+   Flight::auth_middleware()->authorizeRole(Roles::USER);
    Flight::json(Flight::newsletterService()->get_all_subscriptions());
 });
-?>

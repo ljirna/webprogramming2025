@@ -24,7 +24,8 @@ require_once __DIR__ . '/../services/EventsService.php';
  * )
  */
 
-Flight::route('GET /events', function() {
+Flight::route('GET /events', function () {
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::eventsService()->get_all_events());
 });
 
@@ -51,7 +52,8 @@ Flight::route('GET /events', function() {
  * )
  */
 
-Flight::route('GET /events/six', function() {
+Flight::route('GET /events/six', function () {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::eventsService()->get_six_events());
 });
 
@@ -88,7 +90,8 @@ Flight::route('GET /events/six', function() {
  */
 
 
-Flight::route('GET /events/@event_id', function($event_id) {
+Flight::route('GET /events/@event_id', function ($event_id) {
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::eventsService()->get_event_by_id($event_id));
 });
 
@@ -128,7 +131,8 @@ Flight::route('GET /events/@event_id', function($event_id) {
  * )
  */
 
-Flight::route('POST /events', function() {
+Flight::route('POST /events', function () {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::eventsService()->add_event($data));
 });
@@ -181,7 +185,8 @@ Flight::route('POST /events', function() {
 
 
 
-Flight::route('PUT /events/@event_id', function($event_id) {
+Flight::route('PUT /events/@event_id', function ($event_id) {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::eventsService()->update_event($event_id, $data));
 });
@@ -218,6 +223,7 @@ Flight::route('PUT /events/@event_id', function($event_id) {
  */
 
 
-Flight::route('DELETE /events/@event_id', function($event_id) {
+Flight::route('DELETE /events/@event_id', function ($event_id) {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::eventsService()->delete_event($event_id));
 });

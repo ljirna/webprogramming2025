@@ -22,7 +22,8 @@ require_once __DIR__ . '/../services/ReservationsService.php';
  * )
  */
 
-Flight::route('POST /reservations', function() {
+Flight::route('POST /reservations', function () {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::reservationsService()->add_reservation($data));
 });
@@ -55,6 +56,7 @@ Flight::route('POST /reservations', function() {
  * )
  */
 
-Flight::route('GET /reservations/event/@event_id', function($event_id) {
+Flight::route('GET /reservations/event/@event_id', function ($event_id) {
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::reservationsService()->get_reservations_for_event($event_id));
 });
