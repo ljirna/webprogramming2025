@@ -111,9 +111,14 @@ var UserService = {
             data-url="views/admin.html"
           ></section>
           <section
-            id="single_event_admin"
-            data-load="single_event_admin.html"
-            style="display: block !important"
+            id="admin-manage-events"
+            data-load="true"
+            data-url="views/admin-manage-events.html"
+          ></section>
+          <section
+            id="admin-manage-users"
+            data-load="true"
+            data-url="views/admin-manage-users.html"
           ></section>
           `;
           $("#spapp").html(main);

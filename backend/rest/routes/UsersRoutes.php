@@ -8,12 +8,12 @@ require_once __DIR__ . '/../services/UsersService.php';
  *     summary="Get all users",
  *     @OA\Response(
  *         response=200,
- *         description="List of all users"
+ *         description="List of all users" 
  *     )
  * )
  */
 Flight::route('GET /users', function () {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::usersService()->get_all_users());
 });
 
@@ -37,7 +37,7 @@ Flight::route('GET /users', function () {
  */
 
 Flight::route('GET /users/@user_id', function ($user_id) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::usersService()->get_user_by_id($user_id));
 });
 
