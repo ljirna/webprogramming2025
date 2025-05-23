@@ -22,7 +22,7 @@ class EventsDao extends BaseDao {
 
     /*Function for reading only one event*/
     public function get_event_by_id($event_id){
-        return $this->query("SELECT * FROM events WHERE event_id = :event_id", ["event_id" => $event_id]);
+        return $this->query_unique("SELECT * FROM events WHERE event_id = :event_id", ["event_id" => $event_id]);
       }
 
     /*Function for adding a new event*/

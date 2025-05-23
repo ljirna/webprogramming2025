@@ -15,7 +15,7 @@ let AdminService = {
           <img src="${event.image}" class="img-fluid" />
           <div class="details">
             <h3>
-              <a href="#single_event_admin" onclick="AdminService.getSingleEvent(${event.event_id})">${event.title}</a>
+              <a href="javascript:void(0)" onclick="AdminService.getSingleEvent(${event.event_id})">${event.title}</a>
             </h3>
             <p>${event.date} · ${event.time}</p>
             <p>${event.description}</p>
@@ -31,32 +31,36 @@ let AdminService = {
       });
     });
   },
-  // getSingleEvent: function (event_id) {
-  //   window.location.hash = "#single_event_admin";
-  //   RestClient.get("events/" + event_id, function (event) {
-  //     console.log(event);
-  //     const singleEvent = document.getElementById("event-details-admin");
-  //     singleEvent.innerHTML = `
-  //           <div class="col-md-6">
-  //             <div class="event-photos">
-  //               <img src="${event.image}" class="img-fluid" alt="Event Photo 1" />
-  //             </div>
-  //           </div>
 
-  //           <div class="col-md-6">
-  //             <div class="event-info">
-  //               <h3>${event.title}</h3>
-  //               <p>${event.description}</p>
-  //               <div class="text-center"></div>
-  //             </div>
-  //             <div class="text-center mt-3">
-  //               <a class="btn btn-primary btn-lg me-2">Edit Event</a>
-  //               <a class="btn btn-danger btn-lg">Delete Event</a>
-  //             </div>
-  //           </div>
-  //     `;
-  //   });
-  // },
+  getSingleEvent: function (event_id) {
+    window.location.hash = "#single_event_admin";
+    RestClient.get("events/" + event_id, function (response) {
+      const event = response;
+      console.log(event);
+      const singleEvent = document.getElementById("event-details-admin");
+      if (singleEvent) {
+        singleEvent.innerHTML = `
+            <div class="col-md-6">
+              <div class="event-photos">
+                <img src="assets/${event.image}" class="img-fluid" alt="Event Photo 1" />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="event-info">
+                <h3>${event.title}</h3>
+                <p>${event.description}</p>
+                <div class="text-center"></div>
+              </div>
+              <div class="text-center mt-3">
+                <a class="btn btn-primary btn-lg me-2">Edit Event</a>
+                <a class="btn btn-danger btn-lg">Delete Event</a>
+              </div>
+            </div>
+          `;
+      }
+    });
+  },
 
   editEvent: function (id) {
     RestClient.get(`events/${id}`, function (event) {
