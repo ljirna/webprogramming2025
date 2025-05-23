@@ -132,7 +132,7 @@ Flight::route('GET /events/@event_id', function ($event_id) {
  */
 
 Flight::route('POST /events', function () {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::eventsService()->add_event($data));
 });
@@ -186,7 +186,7 @@ Flight::route('POST /events', function () {
 
 
 Flight::route('PUT /events/@event_id', function ($event_id) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::eventsService()->update_event($event_id, $data));
 });
@@ -224,6 +224,6 @@ Flight::route('PUT /events/@event_id', function ($event_id) {
 
 
 Flight::route('DELETE /events/@event_id', function ($event_id) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::eventsService()->delete_event($event_id));
 });

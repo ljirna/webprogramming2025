@@ -178,5 +178,232 @@
     <script>
       UserService.generateMenuItems();
     </script>
+
+    <!-- Add Event Modal -->
+    <div
+      class="modal fade"
+      id="addEventModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="addEventModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="addEventModalLabel">Add Event</h5>
+            <button
+              type="button"
+              class="close text-white"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="add-event-form" enctype="multipart/form-data">
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="add_event_title">Event Title</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="add_event_title"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="add_event_date">Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="add_event_date"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="add_event_time">Time</label>
+                    <input
+                      type="time"
+                      class="form-control"
+                      id="add_event_time"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="add_event_location">Location</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="add_event_location"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="add_event_description">Description</label>
+                <textarea
+                  class="form-control"
+                  id="add_event_description"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-success">Add Event</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div
+      id="editUserModal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="editUserModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="edit-user-form">
+              <input type="hidden" id="edit_user_id" />
+              <div class="form-group">
+                <label for="edit_user_username">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="edit_user_username"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit_user_first_name">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="edit_user_first_name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit_user_last_name">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="edit_user_last_name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit_user_email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="edit_user_email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit_user_role">Role</label>
+                <select class="form-control" id="edit_user_role">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary mt-2">
+                Save Changes
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("edit-user-form");
+        if (form) {
+          form.onsubmit = function (e) {
+            e.preventDefault();
+            const user_id = document.getElementById("edit_user_id").value;
+            const updatedUser = {
+              username: document.getElementById("edit_user_username").value,
+              first_name: document.getElementById("edit_user_first_name").value,
+              last_name: document.getElementById("edit_user_last_name").value,
+              email: document.getElementById("edit_user_email").value,
+              role: document.getElementById("edit_user_role").value,
+            };
+            RestClient.put("users/" + user_id, updatedUser, function () {
+              $("#editUserModal").modal("hide");
+              toastr.success("User updated successfully");
+              AdminService.getAllUsers();
+            });
+          };
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const addEventBtn = document.getElementById("add-event-btn");
+        if (addEventBtn) {
+          addEventBtn.addEventListener("click", function () {
+            const modal = new bootstrap.Modal(
+              document.getElementById("addEventModal")
+            );
+            modal.show();
+          });
+        }
+
+        const addEventForm = document.getElementById("add-event-form");
+        if (addEventForm) {
+          addEventForm.onsubmit = function (e) {
+            e.preventDefault();
+            const newEvent = {
+              title: document.getElementById("add_event_title").value,
+              date: document.getElementById("add_event_date").value,
+              time: document.getElementById("add_event_time").value,
+              location: document.getElementById("add_event_location").value,
+              description: document.getElementById("add_event_description")
+                .value,
+            };
+
+            RestClient.post("events", newEvent, function () {
+              var modal = bootstrap.Modal.getInstance(
+                document.getElementById("addEventModal")
+              );
+              if (modal) modal.hide();
+              toastr.success("Event added successfully");
+              AdminService.getAllEvents();
+              addEventForm.reset();
+            });
+          };
+        }
+      });
+    </script>
   </body>
 </html>

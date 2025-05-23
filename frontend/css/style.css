@@ -1049,7 +1049,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .modal-header {
-  background-color: #f8f9fa;
+  background-color: rgb(203 225 247);
   border-bottom: 1px solid #dee2e6;
 }
 
@@ -1718,7 +1718,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------------------------------------*/
 
 #admin .card {
-  background: rgba(6, 12, 34, 0.76);
+  background: rgba(18, 7, 43, 0.98);
   border: none;
   border-radius: 10px;
   padding: 30px;

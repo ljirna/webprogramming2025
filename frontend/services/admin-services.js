@@ -1,4 +1,5 @@
 let AdminService = {
+  //  Functions for managing events
   getAllEvents: function () {
     RestClient.get("events", function (data) {
       const eventsContainer = document.getElementById(
@@ -18,6 +19,7 @@ let AdminService = {
             </h3>
             <p>${event.date} · ${event.time}</p>
             <p>${event.description}</p>
+            <p>${event.location}</p>
             <div class="admin-buttons">
               <button class="btn-edit" onclick="AdminService.editEvent(${event.event_id})">Edit</button>
               <button class="btn-delete" onclick="AdminService.deleteEvent(${event.event_id})">Delete</button>
@@ -29,66 +31,35 @@ let AdminService = {
       });
     });
   },
-  getSingleEvent: function (event_id) {
-    window.location.hash = "#single_event_admin";
-    RestClient.get("events/" + event_id, function (event) {
-      console.log(event);
-      const singleEvent = document.getElementById("event-details-admin");
-      singleEvent.innerHTML = `
-            <div class="col-md-6">
-              <div class="event-photos">
-                <img src="${event.image}" class="img-fluid" alt="Event Photo 1" />
-              </div>
-            </div>
+  // getSingleEvent: function (event_id) {
+  //   window.location.hash = "#single_event_admin";
+  //   RestClient.get("events/" + event_id, function (event) {
+  //     console.log(event);
+  //     const singleEvent = document.getElementById("event-details-admin");
+  //     singleEvent.innerHTML = `
+  //           <div class="col-md-6">
+  //             <div class="event-photos">
+  //               <img src="${event.image}" class="img-fluid" alt="Event Photo 1" />
+  //             </div>
+  //           </div>
 
-            <div class="col-md-6">
-              <div class="event-info">
-                <h3>${event.title}</h3>
-                <p>${event.description}</p>
-                <div class="text-center"></div>
-              </div>
-              <div class="text-center mt-3">
-                <a class="btn btn-primary btn-lg me-2">Edit Event</a>
-                <a class="btn btn-danger btn-lg">Delete Event</a>
-              </div>
-            </div>
-      `;
-    });
-  },
+  //           <div class="col-md-6">
+  //             <div class="event-info">
+  //               <h3>${event.title}</h3>
+  //               <p>${event.description}</p>
+  //               <div class="text-center"></div>
+  //             </div>
+  //             <div class="text-center mt-3">
+  //               <a class="btn btn-primary btn-lg me-2">Edit Event</a>
+  //               <a class="btn btn-danger btn-lg">Delete Event</a>
+  //             </div>
+  //           </div>
+  //     `;
+  //   });
+  // },
 
-  editEvent: function (event_id) {
-    RestClient.get("events/" + event_id, function (event) {
-      const newTitle = prompt("Edit event title:", event.title);
-      if (newTitle === null) return;
-
-      const newDescription = prompt(
-        "Edit event description:",
-        event.description
-      );
-      if (newDescription === null) return;
-
-      const newDate = prompt("Edit event date (YYYY-MM-DD):", event.date);
-      if (newDate === null) return;
-
-      const newTime = prompt("Edit event time (HH:MM):", event.time);
-      if (newTime === null) return;
-
-      const updatedEvent = {
-        title: newTitle,
-        description: newDescription,
-        date: newDate,
-        time: newTime,
-      };
-
-      RestClient.put("events/" + event_id, updatedEvent, function (response) {
-        alert("Event updated!");
-        AdminService.getAllEvents();
-      });
-    });
-  },
-
-  getAllUsers: function () {
-    RestClient.get("events/" + event_id, function (event) {
+  editEvent: function (id) {
+    RestClient.get(`events/${id}`, function (event) {
       document.getElementById("edit_event_title").value = event.title || "";
       document.getElementById("edit_event_date").value = event.date || "";
       document.getElementById("edit_event_time").value = event.time || "";
@@ -96,9 +67,85 @@ let AdminService = {
         event.location || "";
       document.getElementById("edit_event_description").value =
         event.description || "";
-      document
-        .getElementById("edit-event-form")
-        .setAttribute("data-event-id", event_id);
+      var modal = new bootstrap.Modal(
+        document.getElementById("editEventModal")
+      );
+      modal.show();
+    });
+  },
+
+  deleteEvent: function (event_id) {
+    if (confirm("Are you sure you want to delete this event?")) {
+      RestClient.delete("events/" + event_id, {}, function () {
+        toastr.success("Event succesfully deleted");
+        AdminService.getAllEvents();
+      });
+    }
+  },
+
+  //Functions for managing users
+
+  getAllUsers: function () {
+    RestClient.get("users", function (data) {
+      const usersContainer = document.getElementById(
+        "users-on-admin-dashboard"
+      );
+      if (!usersContainer) return;
+      usersContainer.innerHTML = "";
+
+      //Sortiranje usera po roli na admin strani
+      data.sort((a, b) => {
+        if (a.role === "admin" && b.role !== "admin") return -1;
+        if (a.role !== "admin" && b.role === "admin") return 1;
+        return 0;
+      });
+
+      data.forEach((user) => {
+        const userDiv = document.createElement("div");
+        userDiv.className = "col-lg-4 col-md-6";
+        userDiv.id = "user-card-" + user.user_id;
+        userDiv.innerHTML = `
+          <div class="speaker">
+            <div class="details">
+              <h3>${user.first_name || ""} ${user.last_name || ""}<h3>
+              <p>Username: ${user.username}</p>
+              <p>Email: ${user.email || ""}</p>
+              <p>Role: ${user.role || ""}</p>
+              <div class="admin-buttons">
+                <button class="btn-edit" onclick="AdminService.editUser(${
+                  user.user_id
+                })">Edit</button>
+                <button class="btn-delete" onclick="AdminService.deleteUser(${
+                  user.user_id
+                })">Delete</button>
+              </div>
+            </div>
+          </div>
+          `;
+        usersContainer.appendChild(userDiv);
+      });
+    });
+  },
+  deleteUser: function (user_id) {
+    if (confirm("Are you sure you want to delete this user?")) {
+      RestClient.delete("users/" + user_id, {}, function () {
+        toastr.success("User succesfully deleted");
+        AdminService.getAllUsers();
+      });
+    }
+  },
+  editUser: function (user_id) {
+    RestClient.get("users/" + user_id, function (user) {
+      document.getElementById("edit_user_id").value = user.user_id || "";
+      document.getElementById("edit_user_username").value = user.username || "";
+      document.getElementById("edit_user_first_name").value =
+        user.first_name || "";
+      document.getElementById("edit_user_last_name").value =
+        user.last_name || "";
+      document.getElementById("edit_user_email").value = user.email || "";
+      document.getElementById("edit_user_role").value = user.role || "user";
+      var modal = new bootstrap.Modal(document.getElementById("editUserModal"));
+      modal.show();
     });
   },
 };

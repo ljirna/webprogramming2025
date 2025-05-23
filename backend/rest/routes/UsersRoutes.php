@@ -13,7 +13,7 @@ require_once __DIR__ . '/../services/UsersService.php';
  * )
  */
 Flight::route('GET /users', function () {
-    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::usersService()->get_all_users());
 });
 
@@ -37,7 +37,7 @@ Flight::route('GET /users', function () {
  */
 
 Flight::route('GET /users/@user_id', function ($user_id) {
-    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
+    //Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::usersService()->get_user_by_id($user_id));
 });
 
@@ -124,7 +124,7 @@ Flight::route('POST /users', function () {
  */
 
 Flight::route('PUT /users/@user_id', function ($user_id) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::usersService()->update_user($user_id, $data));
 });
@@ -149,7 +149,7 @@ Flight::route('PUT /users/@user_id', function ($user_id) {
  */
 
 Flight::route('DELETE /users/@user_id', function ($user_id) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::usersService()->delete_user($user_id));
 });
 
@@ -173,6 +173,6 @@ Flight::route('DELETE /users/@user_id', function ($user_id) {
  */
 
 Flight::route('GET /users/role/@role', function ($role) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::usersService()->get_users_by_role($role));
 });
