@@ -1,4 +1,4 @@
-let AdminService = {
+let AdminService = { 
   //  Functions for managing events
   getAllEvents: function () {
     RestClient.get("events", function (data) {
@@ -18,7 +18,6 @@ let AdminService = {
               <a href="javascript:void(0)" onclick="AdminService.getSingleEvent(${event.event_id})">${event.title}</a>
             </h3>
             <p>${event.date} · ${event.time}</p>
-            <p>${event.description}</p>
             <p>${event.location}</p>
             <div class="admin-buttons">
               <button class="btn-edit" onclick="AdminService.editEvent(${event.event_id})">Edit</button>
@@ -42,7 +41,7 @@ let AdminService = {
         singleEvent.innerHTML = `
             <div class="col-md-6">
               <div class="event-photos">
-                <img src="assets/${event.image}" class="img-fluid" alt="Event Photo 1" />
+                <img src="${event.image}" class="img-fluid" alt="Event Photo 1" />
               </div>
             </div>
 
@@ -50,11 +49,13 @@ let AdminService = {
               <div class="event-info">
                 <h3>${event.title}</h3>
                 <p>${event.description}</p>
+                <p><strong>Location: </strong>${event.location}</p>
+                <p><strong>Date: </strong>${event.date}</p>
+                <p><strong>Time: </strong>${event.time}</p>
                 <div class="text-center"></div>
               </div>
               <div class="text-center mt-3">
-                <a class="btn btn-primary btn-lg me-2">Edit Event</a>
-                <a class="btn btn-danger btn-lg">Delete Event</a>
+                <a class="btn btn-danger btn-lg" href="javascript:void(0)" onclick="AdminService.deleteEvent(${event.event_id})">Delete Event</a>
               </div>
             </div>
           `;
@@ -64,6 +65,7 @@ let AdminService = {
 
   editEvent: function (id) {
     RestClient.get(`events/${id}`, function (event) {
+      document.getElementById("edit_event_id").value = event.event_id || "";
       document.getElementById("edit_event_title").value = event.title || "";
       document.getElementById("edit_event_date").value = event.date || "";
       document.getElementById("edit_event_time").value = event.time || "";
@@ -77,6 +79,7 @@ let AdminService = {
       modal.show();
     });
   },
+
 
   deleteEvent: function (event_id) {
     if (confirm("Are you sure you want to delete this event?")) {
