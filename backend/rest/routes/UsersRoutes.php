@@ -37,7 +37,7 @@ Flight::route('GET /users', function () {
  */
 
 Flight::route('GET /users/@user_id', function ($user_id) {
-    //Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::usersService()->get_user_by_id($user_id));
 });
 
@@ -61,7 +61,7 @@ Flight::route('GET /users/@user_id', function ($user_id) {
  */
 
 Flight::route('GET /users/email/@email', function ($email) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json((Flight::usersService()->get_user_by_email($email)));
 });
 

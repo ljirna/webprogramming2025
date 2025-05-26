@@ -50,6 +50,6 @@ Flight::route('POST /newsletter', function () {
  */
 
 Flight::route('GET /newsletter', function () {
-   Flight::auth_middleware()->authorizeRole(Roles::USER);
+   Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
    Flight::json(Flight::newsletterService()->get_all_subscriptions());
 });

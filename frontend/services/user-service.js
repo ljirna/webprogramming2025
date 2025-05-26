@@ -125,6 +125,8 @@ var UserService = {
           <section id="profile" data-load="profile.html"></section>
           <section id="admin-manage-events" data-load="admin-manage-events.html"></section>
           <section id="admin-manage-users" data-load="admin-manage-users.html"></section>
+          <section id="admin-manage-newsletters" data-load="admin-manage-newsletters.html"></section>
+          <section id="admin-manage-reservations" data-load="admin-manage-reservations.html"></section>
           <section id="single_event_admin" data-load="single_event_admin.html"></section>
           `;
           $("#spapp").html(main);

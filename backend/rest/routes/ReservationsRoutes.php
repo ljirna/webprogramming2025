@@ -57,6 +57,16 @@ Flight::route('POST /reservations', function () {
  */
 
 Flight::route('GET /reservations/event/@event_id', function ($event_id) {
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::reservationsService()->get_reservations_for_event($event_id));
+});
+
+Flight::route('GET /reservations', function () {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    Flight::json(Flight::reservationsService()->get_all_reservations());
+});
+
+Flight::route('DELETE /admin/reservations/@id', function ($id) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    Flight::json(['success' => Flight::reservationsService()->delete_reservation($id)]);
 });

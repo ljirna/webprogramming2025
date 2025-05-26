@@ -95,13 +95,17 @@
             ></textarea>
           </div>
           <div class="form-group">
-            <label for="add_event_image">Image URL</label>
+            <label for="add_event_image">Event Image</label>
             <input
-              type="text"
+              type="file"
               class="form-control"
               id="add_event_image"
+              accept="image/*"
               required
             />
+            <small class="form-text text-muted"
+              >Select an image file (JPG, PNG, etc.)</small
+            >
           </div>
           <button type="submit" class="btn btn-success mt-2">Add Event</button>
         </form>
@@ -113,31 +117,56 @@
 <script>
   document.getElementById("add-event-form").onsubmit = function (e) {
     e.preventDefault();
-    // Gather form values as a plain object
-    const eventData = {
-      title: document.getElementById("add_event_title").value,
-      date: document.getElementById("add_event_date").value,
-      time: document.getElementById("add_event_time").value,
-      location: document.getElementById("add_event_location").value,
-      description: document.getElementById("add_event_description").value,
-      image: document.getElementById("add_event_image").value,
-    };
-    RestClient.post(
-      "events",
-      eventData,
-      function () {
-        var modal = bootstrap.Modal.getInstance(
-          document.getElementById("addEventModal")
+
+    // Create FormData object for the file upload
+    const formData = new FormData();
+
+    // Add the image file
+    const imageFile = document.getElementById("add_event_image").files[0];
+    if (!imageFile) {
+      toastr.error("Please select an image file");
+      return;
+    }
+
+    formData.append("eventImage", imageFile);
+
+    // First upload the image file
+    fetch("/webprogramming2025/backend/api/upload/event-image/", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to upload image");
+        return response.json();
+      })
+      .then((fileData) => {
+        // Now create the event with the image filename
+        const eventData = {
+          title: document.getElementById("add_event_title").value,
+          date: document.getElementById("add_event_date").value,
+          time: document.getElementById("add_event_time").value,
+          location: document.getElementById("add_event_location").value,
+          description: document.getElementById("add_event_description").value,
+          image: "assets/img/speakers/" + fileData.filename, // Store only the filename returned from server
+        };
+
+        // Create the event with the image filename
+        return RestClient.post("events", eventData, function () {
+          // var modal = bootstrap.Modal.getInstance(
+          //   document.getElementById("addEventModal")
+          // );
+          // if (modal) modal.hide();
+          toastr.success("Event added successfully");
+          AdminService.getAllEvents();
+          document.getElementById("add-event-form").reset();
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        toastr.error(
+          "Failed to add event: " + (err.message || "Unknown error")
         );
-        if (modal) modal.hide();
-        toastr.success("Event added successfully");
-        AdminService.getAllEvents();
-        document.getElementById("add-event-form").reset();
-      },
-      function (err) {
-        toastr.error("Failed to add event");
-      }
-    );
+      });
   };
 </script>
 

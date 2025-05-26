@@ -1,4 +1,4 @@
-let AdminService = { 
+let AdminService = {
   //  Functions for managing events
   getAllEvents: function () {
     RestClient.get("events", function (data) {
@@ -80,11 +80,11 @@ let AdminService = {
     });
   },
 
-
   deleteEvent: function (event_id) {
     if (confirm("Are you sure you want to delete this event?")) {
       RestClient.delete("events/" + event_id, {}, function () {
         toastr.success("Event succesfully deleted");
+        window.location.hash = "#admin-manage-events";
         AdminService.getAllEvents();
       });
     }
@@ -154,5 +154,69 @@ let AdminService = {
       var modal = new bootstrap.Modal(document.getElementById("editUserModal"));
       modal.show();
     });
+  },
+
+  //Functions for managing newsletters
+  getAllNewsletters: function () {
+    RestClient.get("newsletter", function (data) {
+      const container = document.getElementById(
+        "newsletters-on-admin-dashboard"
+      );
+      container.innerHTML = "";
+      data.forEach((newsletter) => {
+        const div = document.createElement("div");
+        div.className = "col-lg-4 col-md-6";
+        div.innerHTML = `
+        <div class="newsletter-card">
+          <div class="details">
+            <h3>${newsletter.email}</h3>
+          </div>
+        </div>
+      `;
+        container.appendChild(div);
+      });
+    });
+  },
+
+  //Functions for managing reservations
+  getAllReservations: function () {
+    RestClient.get("reservations", function (data) {
+      const container = document.getElementById(
+        "reservations-on-admin-dashboard"
+      );
+      container.innerHTML = "";
+      data.forEach((reservation) => {
+        const div = document.createElement("div");
+        div.className = "col-md-6 col-12";
+        div.innerHTML = `
+        <div class="reservation-card">
+          <div class="details">
+            <h3>Reservation #${reservation.reservation_id}</h3>
+            <p><strong>User:</strong> ${reservation.user_email || "N/A"}</p>
+            <p><strong>Event:</strong> ${reservation.event_title || "N/A"}</p>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-danger btn-sm" onclick="AdminService.deleteReservation(${
+              reservation.reservation_id
+            })">Delete</button>
+          </div>
+        </div>
+      `;
+        container.appendChild(div);
+      });
+    });
+  },
+
+  deleteReservation: function (reservation_id) {
+    if (confirm("Are you sure you want to delete this reservation?")) {
+      RestClient.delete(
+        "admin/reservations/" + reservation_id,
+        {},
+        function () {
+          toastr.success("Reservation deleted");
+          AdminService.getAllReservations();
+        }
+      );
+    }
   },
 };
