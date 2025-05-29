@@ -1,0 +1,386 @@
+<section
+  class="section-with-bg py-5"
+  style="min-height: 100vh; background: #f8f9fa"
+>
+  <div class="container" style="padding-top: 40px">
+    <div class="section-header">
+      <h2 class="fw-bold text-success">Manage Events</h2>
+      <p class="lead text-muted">
+        View, edit, or delete all events in the system.
+      </p>
+    </div>
+
+    <div class="mb-4 text-start">
+      <button class="btn btn-danger rounded-pill px-4" id="add-event-btn">
+        Add Event
+      </button>
+    </div>
+
+    <div class="row" id="events-on-admin-dashboard"></div>
+
+    <div class="mt-4 text-center">
+      <a href="#admin" class="btn btn-secondary rounded-pill px-4">
+        Back to Dashboard
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Add Event Modal -->
+<div
+  id="addEventModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addEventModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addEventModalLabel">Add Event</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-event-form">
+          <div class="form-group">
+            <label for="add_event_title">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="add_event_title"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="add_event_date">Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="add_event_date"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="add_event_time">Time</label>
+            <input
+              type="time"
+              class="form-control"
+              id="add_event_time"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="add_event_location">Location</label>
+            <input
+              type="text"
+              class="form-control"
+              id="add_event_location"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="add_event_description">Description</label>
+            <textarea
+              class="form-control"
+              id="add_event_description"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="add_event_image">Event Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="add_event_image"
+              accept="image/*"
+              required
+            />
+            <small class="form-text text-muted"
+              >Select an image file (JPG, PNG, etc.)</small
+            >
+          </div>
+          <button type="submit" class="btn btn-success mt-2">Add Event</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("add-event-form").onsubmit = function (e) {
+    e.preventDefault();
+
+    // Create FormData object for the file upload
+    const formData = new FormData();
+
+    // Add the image file
+    const imageFile = document.getElementById("add_event_image").files[0];
+    if (!imageFile) {
+      toastr.error("Please select an image file");
+      return;
+    }
+
+    formData.append("eventImage", imageFile);
+
+    // First upload the image file
+    fetch("/webprogramming2025/backend/api/upload/event-image/", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to upload image");
+        return response.json();
+      })
+      .then((fileData) => {
+        // Now create the event with the image filename
+        const eventData = {
+          title: document.getElementById("add_event_title").value,
+          date: document.getElementById("add_event_date").value,
+          time: document.getElementById("add_event_time").value,
+          location: document.getElementById("add_event_location").value,
+          description: document.getElementById("add_event_description").value,
+          image: "assets/img/speakers/" + fileData.filename, // Store only the filename returned from server
+        };
+
+        // Create the event with the image filename
+        return RestClient.post("events", eventData, function () {
+          // var modal = bootstrap.Modal.getInstance(
+          //   document.getElementById("addEventModal")
+          // );
+          // if (modal) modal.hide();
+          toastr.success("Event added successfully");
+          AdminService.getAllEvents();
+          document.getElementById("add-event-form").reset();
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        toastr.error(
+          "Failed to add event: " + (err.message || "Unknown error")
+        );
+      });
+  };
+</script>
+
+<script>
+  document.getElementById("add-event-btn").onclick = function () {
+    var modal = new bootstrap.Modal(document.getElementById("addEventModal"));
+    modal.show();
+  };
+</script>
+
+<!-- Edit Event Modal -->
+<div
+  id="editEventModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editEventModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-event-form">
+          <input type="hidden" id="edit_event_id" />
+          <div class="form-group">
+            <label for="edit_event_title">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="edit_event_title"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_event_date">Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="edit_event_date"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_event_time">Time</label>
+            <input
+              type="time"
+              class="form-control"
+              id="edit_event_time"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_event_location">Location</label>
+            <input
+              type="text"
+              class="form-control"
+              id="edit_event_location"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit_event_description">Description</label>
+            <textarea
+              class="form-control"
+              id="edit_event_description"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2">
+            Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  AdminService.getAllEvents();
+  function attachEditEventFormHandler() {
+    const form = document.getElementById("edit-event-form");
+    if (form) {
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        const event_id = document.getElementById("edit_event_id").value;
+        const updatedEvent = {
+          title: document.getElementById("edit_event_title").value,
+          date: document.getElementById("edit_event_date").value,
+          time: document.getElementById("edit_event_time").value,
+          location: document.getElementById("edit_event_location").value,
+          description: document.getElementById("edit_event_description").value,
+        };
+        RestClient.put("events/" + event_id, updatedEvent, function () {
+          $("#editEventModal").modal("hide");
+          toastr.success("Event updated successfully");
+          AdminService.getAllEvents;
+        });
+      };
+    }
+  }
+  attachEditEventFormHandler();
+</script>
+
+<!-- <script>
+  AdminService.getAllEvents();
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("edit-event-form");
+    if (form) {
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        const event_id = document.getElementById("edit_event_id").value;
+        const updatedEvent = {
+          title: document.getElementById("edit_event_title").value,
+          date: document.getElementById("edit_event_date").value,
+          time: document.getElementById("edit_event_time").value,
+          location: document.getElementById("edit_event_location").value,
+          description: document.getElementById("edit_event_description").value,
+        };
+        RestClient.put("events/" + event_id, updatedEvent, function () {
+          var modal = bootstrap.Modal.getInstance(
+            document.getElementById("editEventModal")
+          );
+          if (modal) modal.hide();
+          toastr.success("Event updated successfully");
+          AdminService.getAllEvents();
+        });
+      };
+    }
+  });
+</script> -->
+
+<style>
+  /* Speaker/Event Card Styles */
+  .speaker {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .speaker:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .speaker img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .speaker .details {
+    padding: 20px;
+  }
+
+  .speaker .details h3 {
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .speaker .details h3 a {
+    color: #2c4964;
+    transition: 0.3s;
+    text-decoration: none;
+  }
+
+  .speaker .details h3 a:hover {
+    color: #3fbbc0;
+  }
+
+  .speaker .details p {
+    color: #4b4b4b;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  .speaker .details p:first-of-type {
+    color: #6c757d;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  /* Admin-specific adjustments */
+  #events-on-admin-dashboard .speaker .details {
+    position: relative;
+    padding-bottom: 50px; /* Space for admin buttons */
+  }
+
+  /* Add admin action buttons */
+  #events-on-admin-dashboard .speaker .admin-actions {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  #events-on-admin-dashboard .speaker .admin-actions .btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+</style>

@@ -45,12 +45,7 @@ class EventsService extends BaseService
         }
         /*Ensure that the event date is in the future and in the right format*/
         $date = DateTime::createFromFormat('Y-m-d', $event['date']);
-        $errors = DateTime::getLastErrors();
-    
-        if (!$date || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
-            throw new Exception("Date is invalid. Use format YYYY-MM-DD with a valid date.");
-        }
-    
+
         // Check if the date is in the past
         $today = new DateTime(date("Y-m-d"));
         if ($date < $today) {

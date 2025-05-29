@@ -9,7 +9,7 @@ class Config
 {
     public static function DB_NAME()
     {
-        return 'eventivo';
+        return 'eventivo-web';
     }
     public static function DB_PORT()
     {
@@ -26,5 +26,10 @@ class Config
     public static function DB_HOST()
     {
         return '127.0.0.1';
+    }
+
+    public static function JWT_SECRET()
+    {
+        return 'my_jwt_strong_secret';
     }
 }
