@@ -33,6 +33,10 @@
           </div>
         </div>
       </div>
+      <div class="user-reservations mt-5">
+        <h4>Your Reservations</h4>
+        <div id="user-reservations-list"></div>
+      </div>
     </div>
   </div>
   <script>
@@ -69,5 +73,9 @@
           "!";
       }
     }
+  </script>
+  <script>
+    // Load and display user reservations
+    UserSideService.getUserReservations();
   </script>
 </section>
