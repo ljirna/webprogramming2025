@@ -46,6 +46,7 @@ var UserService = {
         console.log(result);
         localStorage.setItem("user_token", result.data.token);
         localStorage.setItem("role", result.data.role);
+        localStorage.setItem("user_id", result.data.user_id);
         window.location.replace("index.html");
         if (result.data.role === Constants.USER_ROLE) {
           window.location.hash = "#home";
@@ -100,6 +101,7 @@ var UserService = {
           <section id="faq" data-load="faq.html"></section>
           <section id="profile" data-load="profile.html"></section>
           <section id="subscribe" data-load="subscribe.html"></section>
+          <section id="buy-tickets" data-load="buy-tickets.html"></section>
           `;
           $("#spapp").html(main);
           break;

@@ -69,24 +69,25 @@ let UserSideService = {
               <p class="mb-2"><strong>Location:</strong> ${event.location}</p>
               <p class="mb-4">${event.description}</p>
               <div class="text-center">
-                <a href="#reserve" class="btn btn-primary btn-lg px-5">
-                  <i class="fa fa-ticket"></i> Reserve Tickets
-                </a>
+              <a href="#buy-tickets" class="btn btn-primary btn-lg px-5">
+                <i class="fa fa-ticket"></i> Reserve Tickets
+              </a>
               </div>
             </div>
           </div>
         </div>
       `;
       }
+      localStorage.setItem("selected_event_id", event_id);
       UserSideService.loadEventGallery(event_id);
     });
   },
+
   loadEventGallery: function (event_id) {
     RestClient.get("event_images/" + event_id, function (images) {
       const galleryGrid = document.querySelector(".gallery-grid");
       if (!galleryGrid) return;
       galleryGrid.innerHTML = "";
-      // Add grid styling
       galleryGrid.style.display = "grid";
       galleryGrid.style.gridTemplateColumns =
         "repeat(auto-fit, minmax(260px, 1fr))";
@@ -107,40 +108,44 @@ let UserSideService = {
       });
     });
   },
-  getUserReservations: function () {
-    RestClient.get("reservations/user", function (reservations) {
-      const container = document.getElementById("user-reservations-list");
-      if (!container) return;
-      if (!reservations || reservations.length === 0) {
-        container.innerHTML =
-          "<p class='text-muted'>You have no reservations yet.</p>";
-        return;
+  reserveTicket: function (user_id, event_id, ticket_type) {
+    RestClient.post(
+      "reservations",
+      {
+        user_id: user_id,
+        event_id: event_id,
+        ticket_type: ticket_type,
+      },
+      function (response) {
+        if (window.toastr) {
+          toastr.success("Reservation successful!");
+        }
+        const form = document.getElementById("reserve-ticket-form");
+        if (form) form.reset();
+      },
+      function (error) {
+        if (window.toastr) {
+          toastr.error("Reservation failed. Please try again.");
+        }
       }
-      container.innerHTML = "";
-      reservations.forEach((res) => {
-        // Adjust property names based on your backend response!
-        container.innerHTML += `
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">${
-              res.event_title || (res.event && res.event.title) || "Event"
-            }</h5>
-            <p class="card-text mb-1"><strong>Date:</strong> ${
-              res.event_date || (res.event && res.event.date) || ""
-            }</p>
-            <p class="card-text mb-1"><strong>Location:</strong> ${
-              res.event_location || (res.event && res.event.location) || ""
-            }</p>
-            <p class="card-text mb-1"><strong>Ticket Type:</strong> ${
-              res.ticket_type || ""
-            }</p>
-            <p class="card-text mb-1"><strong>Reservation ID:</strong> ${
-              res.id || res.reservation_id || ""
-            }</p>
-          </div>
-        </div>
-      `;
-      });
-    });
+    );
+  },
+  initReserveFormHandler: function () {
+    var form = document.getElementById("reserve-ticket-form");
+    if (form) {
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        var ticketTypeRaw = document.getElementById("ticket-type").value;
+        var ticketType = "standard";
+        if (ticketTypeRaw === "pro-access") ticketType = "pro";
+        if (ticketTypeRaw === "premium-access") ticketType = "vip";
+        var eventId = localStorage.getItem("selected_event_id");
+        var userId = localStorage.getItem("user_id");
+        UserSideService.reserveTicket(userId, eventId, ticketType);
+        if (typeof $ !== "undefined" && $("#buy-ticket-modal").length) {
+          $("#buy-ticket-modal").modal("hide");
+        }
+      };
+    }
   },
 };

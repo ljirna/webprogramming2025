@@ -61,19 +61,29 @@
         events, and must-attend gatherings in the city
       </p>
     </div>
-    <form method="POST" action="#">
+    <form id="newsletter-form">
       <div class="form-row justify-content-center">
         <div class="col-auto">
           <input
-            type="text"
+            type="email"
+            id="newsletter-email"
             class="form-control"
             placeholder="Enter your Email"
+            required
           />
         </div>
         <div class="col-auto">
-          <button type="submit">Subscribe</button>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
         </div>
       </div>
+      <div id="newsletter-message" class="mt-2"></div>
     </form>
   </div>
 </section>
+<script>
+document.getElementById("newsletter-form").onsubmit = function(e) {
+  e.preventDefault();
+  const email = document.getElementById("newsletter-email").value;
+  UserSideService.subscribeNewsletter(email);
+};
+</script>

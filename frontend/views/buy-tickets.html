@@ -1,116 +1,210 @@
-    <!--==========================
-      Buy Ticket Section
-    ============================-->
-    <section id="buy-tickets" class="section-with-bg wow fadeInUp">
-        <div class="container" style="padding-top: 5px;">
-  
-          <div class="section-header">
-            <h2>Reserve Tickets</h2>
-            <p>"Secure Your Spot at Sarajevo's Most Exciting Event – Reserve Your Tickets Now Before They're Gone!"
-            </p>
+<section id="buy-tickets" class="section-with-bg wow fadeInUp">
+  <div class="container py-5">
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 font-weight-bold">Reserve Tickets</h2>
+      <p class="lead text-muted">
+        Secure Your Spot at Sarajevo's Most Exciting Event – Reserve Your
+        Tickets Now Before They're Gone!
+      </p>
+    </div>
+    <div class="row mb-4">
+      <!-- Standard Ticket -->
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow h-100 border-primary">
+          <div class="card-body">
+            <h5
+              class="card-title text-primary text-uppercase text-center font-weight-bold"
+            >
+              Standard Ticket
+            </h5>
+            <h6 class="card-price text-center display-4 mb-0">$15</h6>
+            <hr />
+            <ul class="fa-ul mb-4">
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Regular Seating
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Coffee Break
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Custom Name Tag
+              </li>
+              <li class="text-muted">
+                <span class="fa-li"><i class="fa fa-times"></i></span>Community
+                Access
+              </li>
+              <li class="text-muted">
+                <span class="fa-li"><i class="fa fa-times"></i></span>Workshop
+                Access
+              </li>
+              <li class="text-muted">
+                <span class="fa-li"><i class="fa fa-times"></i></span>After
+                Party
+              </li>
+            </ul>
           </div>
-  
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="card mb-5 mb-lg-0">
-                <div class="card-body">
-                  <h5 class="card-title text-muted text-uppercase text-center">Standard Ticket</h5>
-                  <h6 class="card-price text-center">$15</h6>
-                  <hr>
-                  <ul class="fa-ul">
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Name Tag</li>
-                    <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Community Access</li>
-                    <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Workshop Access</li>
-                    <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>After Party</li>
-                  </ul>
-                  <hr>
-                  <div class="text-center">
-                    <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="standard-access">Reserve Now</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="card mb-5 mb-lg-0">
-                <div class="card-body">
-                  <h5 class="card-title text-muted text-uppercase text-center">Pro Ticket</h5>
-                  <h6 class="card-price text-center">$25</h6>
-                  <hr>
-                  <ul class="fa-ul">
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Name Tag</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Community Access</li>
-                    <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Workshop Access</li>
-                    <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>After Party</li>
-                  </ul>
-                  <hr>
-                  <div class="text-center">
-                    <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="pro-access">Reserve Now</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Pro Tier -->
-            <div class="col-lg-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title text-muted text-uppercase text-center">VIP Ticket</h5>
-                  <h6 class="card-price text-center">$35</h6>
-                  <hr>
-                  <ul class="fa-ul">
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Regular Seating</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Coffee Break</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Custom Name Tag</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Community Access</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>Workshop Access</li>
-                    <li><span class="fa-li"><i class="fa fa-check"></i></span>After Party</li>
-                  </ul>
-                  <hr>
-                  <div class="text-center">
-                    <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="premium-access">Reserve Now</button>
-                  </div>
-  
-                </div>
-              </div>
-            </div>
-          </div>
-  
         </div>
-  
-        <!-- Modal Order Form -->
-        <div id="buy-ticket-modal" class="modal fade">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Reserve Tickets</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+      </div>
+      <!-- Pro Ticket -->
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow h-100 border-success">
+          <div class="card-body">
+            <h5
+              class="card-title text-success text-uppercase text-center font-weight-bold"
+            >
+              Pro Ticket
+            </h5>
+            <h6 class="card-price text-center display-4 mb-0">$25</h6>
+            <hr />
+            <ul class="fa-ul mb-4">
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Regular Seating
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Coffee Break
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Custom Name Tag
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Community Access
+              </li>
+              <li class="text-muted">
+                <span class="fa-li"><i class="fa fa-times"></i></span>Workshop
+                Access
+              </li>
+              <li class="text-muted">
+                <span class="fa-li"><i class="fa fa-times"></i></span>After
+                Party
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- VIP Ticket -->
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow h-100 border-warning">
+          <div class="card-body">
+            <h5
+              class="card-title text-warning text-uppercase text-center font-weight-bold"
+            >
+              VIP Ticket
+            </h5>
+            <h6 class="card-price text-center display-4 mb-0">$35</h6>
+            <hr />
+            <ul class="fa-ul mb-4">
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Regular Seating
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Coffee Break
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Custom Name Tag
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Community Access
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >Workshop Access
+              </li>
+              <li>
+                <span class="fa-li"
+                  ><i class="fa fa-check text-success"></i></span
+                >After Party
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Single Reserve Button -->
+    <div class="text-center mb-5">
+      <button
+        type="button"
+        class="btn btn-primary btn-lg px-5"
+        data-toggle="modal"
+        data-target="#buy-ticket-modal"
+      >
+        Reserve
+      </button>
+    </div>
+    <!-- Modal Order Form -->
+    <div
+      class="modal fade"
+      id="buy-ticket-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="buyTicketModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="buyTicketModalLabel">Reserve Ticket</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="reserve-ticket-form" method="POST" action="#">
+              <div class="form-group">
+                <label for="ticket-type" class="font-weight-bold"
+                  >Ticket Type</label
+                >
+                <select
+                  id="ticket-type"
+                  name="ticket-type"
+                  class="form-control"
+                  required
+                >
+                  <option value="">-- Select Your Ticket Type --</option>
+                  <option value="standard-access">Standard Ticket</option>
+                  <option value="pro-access">Pro Ticket</option>
+                  <option value="premium-access">VIP Ticket</option>
+                </select>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block">
+                  Reserve
                 </button>
               </div>
-              <div class="modal-body">
-                <form method="POST" action="#">
-
-                  <div class="form-group">
-                    <input type="text" class="form-control" name="your-email" placeholder="Your Email">
-                  </div>
-                  <div class="form-group">
-                    <select id="ticket-type" name="ticket-type" class="form-control" >
-                      <option value="">-- Select Your Ticket Type --</option>
-                      <option value="standard-access">Standard Ticket</option>
-                      <option value="pro-access">Pro Ticket</option>
-                      <option value="premium-access">VIP Ticket</option>
-                    </select>
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" class="btn">Reserve</button>
-                  </div>
-                </form>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
-  
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  UserSideService.initReserveFormHandler();
+</script>
