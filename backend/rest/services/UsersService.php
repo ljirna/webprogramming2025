@@ -37,6 +37,7 @@ class UsersService extends BaseService
         return $this->usersDao->get_user_by_email($email);
     }
 
+
     /*Register a new user*/
     public function add_user($user)
     {

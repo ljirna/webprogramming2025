@@ -37,6 +37,7 @@ class UsersDao extends BaseDao
         );
     }
 
+
     /* Add a new user (registration)*/
     public function add_user($user)
     {

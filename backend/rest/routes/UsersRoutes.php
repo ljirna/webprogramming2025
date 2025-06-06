@@ -66,6 +66,29 @@ Flight::route('GET /users/email/@email', function ($email) {
 });
 
 /**
+ * @OA\Get(
+ *     path="/users/username/{username}",
+ *     tags={"users"},
+ *     summary="Get user by username",
+ *     @OA\Parameter(
+ *         name="username",
+ *         in="path",
+ *         required=true,
+ *         description="Username of user to fetch",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="User details"
+ *     )
+ * )
+ */
+Flight::route('GET /users/username/@username', function ($username) {
+    
+    Flight::json(Flight::usersService()->get_user_by_username($username));
+});
+
+/**
  * @OA\Post(
  *     path="/users",
  *     tags={"users"},

@@ -4,20 +4,77 @@ var UserService = {
     if (token && token !== undefined) {
       window.location.replace("index.html");
     }
+
+    // Login form validation
     $("#login-form").validate({
+      rules: {
+        email: {
+          required: true,
+          email: true,
+        },
+        password: {
+          required: true,
+          minlength: 8,
+          maxlength: 20,
+        },
+      },
+      messages: {
+        email: {
+          required: "Please enter your email",
+          email: "Please enter a valid email address",
+        },
+        password: {
+          required: "Please enter your password",
+          minlength: "Password must be at least 8 characters long",
+          maxlength: "Password cannot be longer than 20 characters",
+        },
+      },
       submitHandler: function (form) {
         var entity = Object.fromEntries(new FormData(form).entries());
         UserService.login(entity);
+        form.reset();
       },
     });
+
+    // Register form validation
     $("#register-form").validate({
+      rules: {
+        name: "required",
+        username: {
+          required: true,
+          minlength: 3,
+        },
+        email: {
+          required: true,
+          email: true,
+        },
+        password: {
+          required: true,
+          minlength: 8,
+          maxlength: 20,
+        },
+      },
+      messages: {
+        name: "Please enter your name",
+        email: {
+          required: "Please enter your email",
+          email: "Please enter a valid email address",
+        },
+        password: {
+          required: "Please enter a password",
+          minlength: "Password must be at least 8 characters long",
+          maxlength: "Password cannot be longer than 20 characters",
+        },
+      },
       submitHandler: function (form) {
         var entity = Object.fromEntries(new FormData(form).entries());
         UserService.register(entity);
+        form.reset();
       },
     });
   },
   register: function (entity) {
+    $.blockUI({ message: "<h3>Processing...</h3>" });
     $.ajax({
       url: Constants.PROJECT_BASE_URL + "auth/register",
       type: "POST",
@@ -25,17 +82,21 @@ var UserService = {
       contentType: "application/json",
       dataType: "json",
       success: function (result) {
-        console.log(result);
+        $.unblockUI();
+        toastr.success("Registration successful! You can now log in.");
         window.location.replace("login.html");
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
+        $.unblockUI();
         toastr.error(
           XMLHttpRequest?.responseText ? XMLHttpRequest.responseText : "Error"
         );
       },
     });
   },
+
   login: function (entity) {
+    $.blockUI({ message: "<h3>Processing...</h3>" });
     $.ajax({
       url: Constants.PROJECT_BASE_URL + "auth/login",
       type: "POST",
@@ -43,7 +104,7 @@ var UserService = {
       contentType: "application/json",
       dataType: "json",
       success: function (result) {
-        console.log(result);
+        $.unblockUI();
         localStorage.setItem("user_token", result.data.token);
         localStorage.setItem("role", result.data.role);
         localStorage.setItem("user_id", result.data.user_id);
@@ -55,6 +116,7 @@ var UserService = {
         }
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
+        $.unblockUI();
         toastr.error(
           XMLHttpRequest?.responseText ? XMLHttpRequest.responseText : "Error"
         );

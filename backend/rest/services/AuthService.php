@@ -22,6 +22,14 @@ class AuthService extends BaseService
         return $this->auth_dao->get_user_by_email($email);
     }
 
+    public function get_user_by_username($username)
+    {
+        if (empty($username)) {
+            throw new Exception("Username is required.");
+        }
+        return $this->auth_dao->get_user_by_username($username);
+    }
+
 
     public function register($entity)
     {
@@ -33,6 +41,11 @@ class AuthService extends BaseService
         $email_exists = $this->auth_dao->get_user_by_email($entity['email']);
         if ($email_exists) {
             return ['success' => false, 'error' => 'Email already registered.'];
+        }
+
+        $username_exists = $this->auth_dao->get_user_by_username($entity['username']);
+        if ($username_exists) {
+            return ['success' => false, 'error' => 'Username already registered.'];
         }
 
 
