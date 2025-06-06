@@ -108,6 +108,26 @@ let UserSideService = {
       });
     });
   },
+
+  subscribeNewsletter: function (email) {
+    RestClient.post(
+      "newsletter",
+      { email: email },
+      function (response) {
+        if (window.toastr) {
+          toastr.success("Subscribed successfully!");
+        }
+        const form = document.getElementById("newsletter-form");
+        if (form) form.reset();
+      },
+      function (error) {
+        if (window.toastr) {
+          toastr.error("Subscription failed. Please try again.");
+        }
+      }
+    );
+  },
+
   reserveTicket: function (user_id, event_id, ticket_type) {
     RestClient.post(
       "reservations",
@@ -147,5 +167,56 @@ let UserSideService = {
         }
       };
     }
+  },
+  getUserReservations: function () {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) return;
+    RestClient.get("reservations/user/" + userId, function (reservations) {
+      const container = document.getElementById("user-reservations-list");
+      if (!container) return;
+      container.innerHTML = "";
+      reservations.forEach(function (res) {
+        const col = document.createElement("div");
+        col.className = "col-md-4 mb-3";
+
+        const card = document.createElement("div");
+        card.className = "card h-100";
+        card.innerHTML = `
+    <div class="card-body">
+      <h5 class="card-title">Event: ${res.event_title || res.event_id}</h5>
+      <p class="card-text"><strong>Type:</strong> ${res.ticket_type}</p>
+      <p class="card-text"><strong>Date:</strong> ${res.event_date || ""}</p>
+      <p class="card-text"><strong>Time:</strong> ${res.event_time || ""}</p>
+      <button class="btn btn-danger btn-sm mt-2 delete-reservation-btn" data-id="${
+        res.reservation_id
+      }">
+        Delete Reservation
+      </button>
+    </div>
+  `;
+        col.appendChild(card);
+        container.appendChild(col);
+      });
+      container
+        .querySelectorAll(".delete-reservation-btn")
+        .forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const reservationId = this.getAttribute("data-id");
+            if (confirm("Are you sure you want to delete this reservation?")) {
+              RestClient.delete(
+                "reservations/" + reservationId,
+                {},
+                function (response) {
+                  toastr.success("Reservation deleted.");
+                  UserSideService.getUserReservations();
+                },
+                function (error) {
+                  toastr.error("Failed to delete reservation.");
+                }
+              );
+            }
+          });
+        });
+    });
   },
 };

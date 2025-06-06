@@ -84,7 +84,6 @@ Flight::route('GET /users/email/@email', function ($email) {
  * )
  */
 Flight::route('GET /users/username/@username', function ($username) {
-    
     Flight::json(Flight::usersService()->get_user_by_username($username));
 });
 

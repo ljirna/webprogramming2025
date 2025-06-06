@@ -49,4 +49,22 @@ class ReservationsDao extends BaseDao
         );
         return $stmt->execute(['reservation_id' => $reservation_id]);
     }
+
+    public function get_reservations_for_user($user_id)
+    {
+        return $this->query(
+            "SELECT r.*, e.title AS event_title, e.date AS event_date, e.time AS event_time
+         FROM reservations r
+         LEFT JOIN events e ON r.event_id = e.event_id
+         WHERE r.user_id = :user_id",
+            ['user_id' => $user_id]
+        );
+    }
+    public function delete_reservation_user($reservation_id)
+    {
+        $stmt = $this->connection->prepare(
+            "DELETE FROM reservations WHERE reservation_id = :reservation_id"
+        );
+        return $stmt->execute(['reservation_id' => $reservation_id]);
+    }
 }

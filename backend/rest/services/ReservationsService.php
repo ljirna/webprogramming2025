@@ -31,4 +31,12 @@ class ReservationsService
     {
         return $this->reservationsDao->delete_reservation($reservation_id);
     }
+    public function get_reservations_for_user($user_id)
+    {
+        return $this->reservationsDao->get_reservations_for_user($user_id);
+    }
+    public function delete_reservation_user($reservation_id)
+    {
+        return $this->reservationsDao->delete_reservation_user($reservation_id);
+    }
 }
