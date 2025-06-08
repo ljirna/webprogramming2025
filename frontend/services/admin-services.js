@@ -32,6 +32,16 @@ let AdminService = {
   },
 
   getSingleEvent: function (event_id) {
+    if (event_id === null) {
+      event_id = localStorage.getItem("event_id");
+    }
+    if (
+      localStorage.getItem("event_id") !== event_id ||
+      localStorage.getItem("event_id") === null
+    ) {
+      window.localStorage.setItem("event_id", event_id);
+    }
+    window.localStorage.setItem("event_id", event_id);
     window.location.hash = "#single_event_admin";
     RestClient.get("events/" + event_id, function (response) {
       const event = response;

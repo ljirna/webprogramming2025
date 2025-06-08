@@ -55,10 +55,16 @@ let Utils = {
     app.route({
       view: "single_event_admin",
       load: "single_event_admin.html",
+      onReady: function () {
+        UserSideService.getSingleEvent((event_id = null));
+      },
     });
     app.route({
       view: "single_event_user",
       load: "single_event_user.html",
+      onReady: function () {
+        UserSideService.getSingleEvent((event_id = null));
+      },
     });
     app.run();
   },
