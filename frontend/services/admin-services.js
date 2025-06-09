@@ -32,6 +32,16 @@ let AdminService = {
   },
 
   getSingleEvent: function (event_id) {
+    if (event_id === null) {
+      event_id = localStorage.getItem("event_id");
+    }
+    if (
+      localStorage.getItem("event_id") !== event_id ||
+      localStorage.getItem("event_id") === null
+    ) {
+      window.localStorage.setItem("event_id", event_id);
+    }
+    window.localStorage.setItem("event_id", event_id);
     window.location.hash = "#single_event_admin";
     RestClient.get("events/" + event_id, function (response) {
       const event = response;
@@ -60,6 +70,7 @@ let AdminService = {
             </div>
           `;
       }
+      AdminService.loadEventGallery(event_id);
     });
   },
 
@@ -218,5 +229,30 @@ let AdminService = {
         }
       );
     }
+  },
+  loadEventGallery: function (event_id) {
+    RestClient.get("event_images/" + event_id, function (images) {
+      const galleryGrid = document.querySelector(".gallery-grid");
+      if (!galleryGrid) return;
+      galleryGrid.innerHTML = "";
+      galleryGrid.style.display = "grid";
+      galleryGrid.style.gridTemplateColumns =
+        "repeat(auto-fit, minmax(260px, 1fr))";
+      galleryGrid.style.gap = "20px";
+      galleryGrid.style.justifyItems = "center";
+      if (!images || images.length === 0) {
+        galleryGrid.innerHTML =
+          "<p class='text-muted'>No gallery images for this event.</p>";
+        return;
+      }
+      images.forEach((img) => {
+        const imgElem = document.createElement("img");
+        imgElem.src = img.image_url;
+        imgElem.alt = "Event Gallery Image";
+        imgElem.style =
+          "width: 100%; max-width: 350px; height: 220px; object-fit: cover; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.12);";
+        galleryGrid.appendChild(imgElem);
+      });
+    });
   },
 };

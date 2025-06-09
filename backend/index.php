@@ -21,7 +21,8 @@ error_reporting(E_ALL);
 Flight::route('/*', function () {
     if (
         strpos(Flight::request()->url, '/auth/login') === 0 ||
-        strpos(Flight::request()->url, '/auth/register') === 0
+        strpos(Flight::request()->url, '/auth/register') === 0 ||
+        preg_match('#^/users/username/[^/]+$#', Flight::request()->url)
     ) {
         return TRUE;
     } else {

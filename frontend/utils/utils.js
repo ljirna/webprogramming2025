@@ -9,12 +9,16 @@ let Utils = {
     }
     var app = $.spapp({
       defaultView: href,
-      templateDir: "../frontend/views/",
+      templateDir: "/webprogramming2025/frontend/views/",
       reloadView: true,
     });
     app.route({
       view: "home",
       load: "home.html",
+    });
+    app.route({
+      view: "buy-tickets",
+      load: "buy-tickets.html",
     });
     app.route({
       view: "events",
@@ -27,10 +31,6 @@ let Utils = {
     app.route({
       view: "admin-manage-users",
       load: "admin-manage-users.html",
-    });
-    app.route({
-      view: "buy-tickets",
-      load: "buy-tickets.html",
     });
     app.route({
       view: "faq",
@@ -55,10 +55,16 @@ let Utils = {
     app.route({
       view: "single_event_admin",
       load: "single_event_admin.html",
+      onReady: function () {
+        UserSideService.getSingleEvent((event_id = null));
+      },
     });
     app.route({
       view: "single_event_user",
       load: "single_event_user.html",
+      onReady: function () {
+        UserSideService.getSingleEvent((event_id = null));
+      },
     });
     app.run();
   },
